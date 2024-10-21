@@ -15,10 +15,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from index.views import index
+from django.urls import path, include
+# 媒体文件夹media
+from django.views.static import serve
+from django.conf import settings
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index)
+    # 指向index的路由文件urls.py
+    path('', include(('index.urls', 'index'), namespace='index')),
+    path('user/', include(('user.urls', 'user'), namespace='user')),
+    path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
 ]
